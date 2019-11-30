@@ -115,13 +115,13 @@ Now using the web interface `Datacenter` > `Create CT` and fill out the details 
 | CPU limit | Leave Blank
 | CPU Units | `1024`
 | **Memory**
-| Memory (MiB) |`256`|
+| Memory (MiB) |`2048`|
 | Swap (MiB) |`256`|
 | **Network**
 | Name | `eth0`
 | Mac Address | `auto`
 | Bridge | `vmbr0`
-| VLAN Tag | Leave Blank
+| VLAN Tag | `110`
 | Rate limit (MN/s) | Leave Default (unlimited)
 | Firewall | `☑`
 | IPv4 | `☑  Static`
@@ -136,19 +136,63 @@ Now using the web interface `Datacenter` > `Create CT` and fill out the details 
 | **Confirm**
 | Start after Created | `☑`
 
-And Click `Finish` to create your PiHole LXC.
+And Click `Finish` to create your Hassio LXC. The above will create the Hassio LXC without any of the required local Mount Points to the host.
 
-Or if you prefer you can simply use Proxmox CLI `typhoon-01` >  `>_ Shell` and type the following to achieve the same thing (note, you will need to create a password for PiHole LXC):
+If you prefer you can simply use Proxmox CLI `typhoon-01` > `>_ Shell` and type the following to achieve the same thing PLUS it will automatically add the required Mount Points (note, have your root password ready for Hassio LXC):
+
+**Script (A):** Including LXC Mount Points
+```
+pct create 131 local:vztmpl/ubuntu-18.04-standard_18.04.1-1_amd64.tar.gz --arch amd64 --cores 1 --hostname hassio --cpulimit 1 --cpuunits 1024 --memory 2048 --net0 name=eth0,bridge=vmbr0,tag=110,firewall=1,gw=192.168.110.5,ip=192.168.110.131/24,type=veth --ostype ubuntu --rootfs typhoon-share:20 --swap 256 --unprivileged 1 --onboot 1 --startup order=1 --password --mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup --mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+```
+
+**Script (B):** Excluding LXC Mount Points:
+```
+pct create 131 local:vztmpl/ubuntu-18.04-standard_18.04.1-1_amd64.tar.gz --arch amd64 --cores 1 --hostname hassio --cpulimit 1 --cpuunits 1024 --memory 2048 --net0 name=eth0,bridge=vmbr0,tag=110,firewall=1,gw=192.168.110.5,ip=192.168.110.131/24,type=veth --ostype ubuntu --rootfs typhoon-share:20 --swap 256 --unprivileged 1 --onboot 1 --startup order=1 --password
+```
+
+### 2.02 Setup Hassio Mount Points - Ubuntu 18.04
+If you used Script (B) in Section 2.01 then you have no Moint Points.
+
+Please note your Proxmox Hassio LXC MUST BE in the shutdown state before proceeding.
+
+To create the Mount Points use the web interface go to Proxmox CLI Datacenter > typhoon-01 > >_ Shell and type the following:
+```
+pct set 131 -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup &&
+pct set 131 -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+```
+
+### 2.03 Unprivileged container mapping - Ubuntu 18.04
+To change the Hassio container mapping we change the container UID and GID in the file `/etc/pve/lxc/131.conf`. Simply use Proxmox CLI `typhoon-01` >  `>_ Shell` and type the following:
 
 ```
-pct create 254 local:vztmpl/ubuntu-18.04-standard_18.04.1-1_amd64.tar.gz --arch amd64 --cores 1 --hostname pihole --cpulimit 1 --cpuunits 1024 --memory 256 --net0 name=eth0,bridge=vmbr0,firewall=1,gw=192.168.1.5,ip=192.168.1.254/24,type=veth --ostype ubuntu --rootfs typhoon-share:20 --swap 256 --unprivileged 1 --onboot 1 --startup order=1 --password
+# User storm | Group homelab
+echo -e "lxc.idmap: u 0 100000 1606
+lxc.idmap: g 0 100000 100
+lxc.idmap: u 1606 1606 1
+lxc.idmap: g 100 100 1
+lxc.idmap: u 1607 101607 63929
+lxc.idmap: g 101 100101 65435
+# Below are our Synology NAS Group GID's (i.e homelab) in range from 65604 > 65704
+lxc.idmap: u 65604 65604 100
+lxc.idmap: g 65604 65604 100" >> /etc/pve/lxc/131.conf &&
+grep -qxF 'root:65604:100' /etc/subuid || echo 'root:65604:100' >> /etc/subuid &&
+grep -qxF 'root:65604:100' /etc/subgid || echo 'root:65604:100' >> /etc/subgid &&
+grep -qxF 'root:100:1' /etc/subgid || echo 'root:100:1' >> /etc/subgid &&
+grep -qxF 'root:1606:1' /etc/subuid || echo 'root:1606:1' >> /etc/subuid
 ```
 
-### 2.02 Install PiHole - Ubuntu 18.04
-First Start your `254 (pihole)` LXC container using the web interface `Datacenter` > `254 (pihole)` > `Start`. Then login into your `254 (pihole)` LXC by going to  `Datacenter` > `254 (pihole)` > `>_ Console and logging in with username `root` and the password you created in the previous step 1.1.
-
-Now using the web interface `Datacenter` > `254 (pihole)` > `>_ Console` run the following command:
-
+### 2.04 Create Hassio default and user folders on your NAS - Ubuntu 18.04
+To create the Syncthing default folders use the web interface go to Proxmox CLI `Datacenter` > `typhoon-01` > `>_ Shell` and type the following:
 ```
-sudo apt update &&
-sudo apt install -y curl &&
+mkdir -m 775 -p {/mnt/pve/cyclone-01-backup/hassio} &&
+chown -R 1606:65606 {/mnt/pve/cyclone-01-backup/hassio}
+```
+
+### 2.05 Create new "storm" user - Ubuntu 18.04
+First start LXC 131 (hassio) with the Proxmox web interface go to `typhoon-01` > `131 (hassio)` > `START`.
+
+Then with the Proxmox web interface go to `typhoon-01` > `131 (hassio)` > `>_ Shell` and type the following:
+```
+groupadd -g 65606 homelab &&
+useradd -u 1606 -g homelab -m storm
+```
