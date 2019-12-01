@@ -87,21 +87,21 @@ fi
 info "Using '$STORAGE' for storage location."
 
 # Set the LXC IPv4 Address
-read -p "'\n'Enter IP address: " -e -i 192.168.110.131/24 IP
+read -p "\n\nEnter IP address: " -e -i 192.168.110.131/24 IP
 info "Container IPv4 address is $IP."
 
 # Set the LXC VLAN tag
-read -p "'\n'Enter VLAN ID: " -e -i 110 TAG
+read -p "\n\nEnter VLAN ID: " -e -i 110 TAG
 info "Container VLAN is $TAG."
 
 # Set the LXC Gateway IPv4 Address
-read -p "'\n'Enter Gateway IPv4 address: " -e -i 192.168.110.5 GW
+read -p "\n\nEnter Gateway IPv4 address: " -e -i 192.168.110.5 GW
 info "Container Gateway IPv4 address is $GW."
 
 # Set the LXC ID
 #CTID=$(pvesh get /cluster/nextid)
 #info "Container ID is $CTID."
-read -p "'\n'Enter LXC CTID: " -e -i 131 CTID
+read -p "Enter LXC CTID: " -e -i 131 CTID
 info "Container ID is $CTID."
 
 # Download latest Debian LXC template
