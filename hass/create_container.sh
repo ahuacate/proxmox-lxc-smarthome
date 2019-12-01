@@ -86,8 +86,18 @@ else
 fi
 info "Using '$STORAGE' for storage location."
 
-# Get the next guest VM/LXC ID
-CTID=$(pvesh get /cluster/nextid)
+# Set the LXC IPv4 Address
+read -p "Enter IP address: " -e -i 192.168.110.131/24 IP
+echo $IP
+
+# Set the LXC Gateway IPv4 Address
+read -p "Enter IP address: " -e -i 192.168.110.5 GW
+echo $GW
+
+# Set the LXC ID
+#CTID=$(pvesh get /cluster/nextid)
+#info "Container ID is $CTID."
+read -p "Enter LXC CTID: " -e -i 131 CTID
 info "Container ID is $CTID."
 
 # Download latest Debian LXC template
@@ -118,7 +128,7 @@ ROOTFS=${STORAGE}:${DISK_REF-}${DISK}
 
 # Create LXC
 msg "Creating LXC container..."
-pvesm alloc $STORAGE $CTID $DISK 4G --format ${DISK_FORMAT:-raw} >/dev/null
+pvesm alloc $STORAGE $CTID $DISK 30G --format ${DISK_FORMAT:-raw} >/dev/null
 if [ "$STORAGE_TYPE" != "zfspool" ]; then
   mke2fs $(pvesm path $ROOTFS) &>/dev/null
 fi
@@ -126,7 +136,7 @@ ARCH=$(dpkg --print-architecture)
 HOSTNAME=hassio
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -features nesting=1 \
-  -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,ip=dhcp -onboot 1 \
+  -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
   -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -storage $STORAGE >/dev/null
 
 # Modify LXC permissions to support Docker
