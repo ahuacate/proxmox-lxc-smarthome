@@ -195,8 +195,8 @@ msg "Starting LXC container..."
 pct start $CTID
 
 # Create new "storm" user
-pct exec $CTID -- bash -c "groupadd -g 65606 homelab"
-pct exec $CTID -- bash -c "useradd -u 1606 -g homelab -m storm"
+#pct exec $CTID -- bash -c "groupadd -g 65606 homelab"
+#pct exec $CTID -- bash -c "useradd -u 1606 -g homelab -m storm"
 
 # Setup container for Hass.io
 pct push $CTID setup.sh /setup.sh -perms 755
