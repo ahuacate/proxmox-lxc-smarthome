@@ -84,11 +84,13 @@ else
     echo -en "\e[1A\e[K\e[1A"
   done
 fi
-info "Using '$STORAGE' for storage location./n"
+info "Using '$STORAGE' for storage location."
+echo
 
 # Set the LXC IPv4 Address
 read -p "Enter IP address: " -e -i 192.168.110.131/24 IP
-info "Container IPv4 address is $IP./n"
+info "Container IPv4 address is $IP."
+echo
 
 # Set the LXC VLAN tag
 read -p "Enter VLAN ID: " -e -i 110 TAG
