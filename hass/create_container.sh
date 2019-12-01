@@ -139,7 +139,7 @@ fi
 ARCH=$(dpkg --print-architecture)
 HOSTNAME=hassio
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
-pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -features nesting=1 \
+pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -cpulimit 1 -cpuunits 1024 -memory 2048 -features nesting=1 \
   -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
   -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -storage $STORAGE >/dev/null
 
