@@ -172,8 +172,8 @@ ln -fs $(readlink /etc/localtime) ${MOUNT}/etc/localtime
 pct unmount $CTID && unset MOUNT
 
 # Add LXC mount points
-pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
-pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+#pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
+#pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
 
 # Unprivileged container mapping for User storm | Group homelab
 echo -e "lxc.idmap: u 0 100000 1606
