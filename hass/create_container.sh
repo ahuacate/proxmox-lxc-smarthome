@@ -134,7 +134,7 @@ ROOTFS=${STORAGE}:${DISK_REF-}${DISK}
 
 # Create LXC
 msg "Creating LXC container..."
-pvesm alloc $STORAGE $CTID $DISK 30G --format ${DISK_FORMAT:-raw} >/dev/null
+pvesm alloc $STORAGE $CTID $DISK 30G --swap 256 --format ${DISK_FORMAT:-raw} >/dev/null
 if [ "$STORAGE_TYPE" != "zfspool" ]; then
   mke2fs $(pvesm path $ROOTFS) &>/dev/null
 fi
