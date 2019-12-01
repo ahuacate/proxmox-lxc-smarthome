@@ -84,18 +84,18 @@ else
     echo -en "\e[1A\e[K\e[1A"
   done
 fi
-info "Using '$STORAGE' for storage location."
+info "Using '$STORAGE' for storage location./n"
 
 # Set the LXC IPv4 Address
-read -p "\n\nEnter IP address: " -e -i 192.168.110.131/24 IP
-info "Container IPv4 address is $IP."
+read -p "Enter IP address: " -e -i 192.168.110.131/24 IP
+info "Container IPv4 address is $IP./n"
 
 # Set the LXC VLAN tag
-read -p "\n\nEnter VLAN ID: " -e -i 110 TAG
+read -p "Enter VLAN ID: " -e -i 110 TAG
 info "Container VLAN is $TAG."
 
 # Set the LXC Gateway IPv4 Address
-read -p "\n\nEnter Gateway IPv4 address: " -e -i 192.168.110.5 GW
+read -p "Enter Gateway IPv4 address: " -e -i 192.168.110.5 GW
 info "Container Gateway IPv4 address is $GW."
 
 # Set the LXC ID
