@@ -166,21 +166,6 @@ lxc.autodev: 1
 lxc.hook.autodev: bash -c 'for dev in $(ls /dev/tty{ACM,S,USB}* 2>/dev/null) $([ -d "/dev/bus" ] && find /dev/bus -type c) /dev/mem /dev/net/tun; do mkdir -p $(dirname ${LXC_ROOTFS_MOUNT}${dev}); for link in $(udevadm info --query=property $dev | sed -n "s/DEVLINKS=//p"); do mkdir -p ${LXC_ROOTFS_MOUNT}$(dirname $link); cp -dR $link ${LXC_ROOTFS_MOUNT}${link}; done; cp -dR $dev ${LXC_ROOTFS_MOUNT}${dev}; done'
 EOF
 
-# Unprivileged container mapping for User storm | Group homelab
-echo -e "lxc.idmap: u 0 100000 1606
-lxc.idmap: g 0 100000 100
-lxc.idmap: u 1606 1606 1
-lxc.idmap: g 100 100 1
-lxc.idmap: u 1607 101607 63929
-lxc.idmap: g 101 100101 65435
-# Below are our Synology NAS Group GID's (i.e homelab) in range from 65604 > 65704
-lxc.idmap: u 65604 65604 100
-lxc.idmap: g 65604 65604 100" >> $LXC_CONFIG
-grep -qxF 'root:65604:100' /etc/subuid || echo 'root:65604:100' >> /etc/subuid &&
-grep -qxF 'root:65604:100' /etc/subgid || echo 'root:65604:100' >> /etc/subgid &&
-grep -qxF 'root:100:1' /etc/subgid || echo 'root:100:1' >> /etc/subgid &&
-grep -qxF 'root:1606:1' /etc/subuid || echo 'root:1606:1' >> /etc/subuid
-
 # Set container timezone to match host
 MOUNT=$(pct mount $CTID | cut -d"'" -f 2)
 ln -fs $(readlink /etc/localtime) ${MOUNT}/etc/localtime
