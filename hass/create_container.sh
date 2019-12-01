@@ -88,11 +88,15 @@ info "Using '$STORAGE' for storage location."
 
 # Set the LXC IPv4 Address
 read -p "Enter IP address: " -e -i 192.168.110.131/24 IP
-echo $IP
+info "Container IPv4 address is $IP."
+
+# Set the LXC VLAN tag
+read -p "Enter VLAN: " -e -i 110 TAG
+info "Container VLAN is $TAG."
 
 # Set the LXC Gateway IPv4 Address
 read -p "Enter IP address: " -e -i 192.168.110.5 GW
-echo $GW
+info "Container Gateway IPv4 address is $GW."
 
 # Set the LXC ID
 #CTID=$(pvesh get /cluster/nextid)
@@ -136,7 +140,7 @@ ARCH=$(dpkg --print-architecture)
 HOSTNAME=hassio
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -features nesting=1 \
-  -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
+  -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
   -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -storage $STORAGE >/dev/null
 
 # Modify LXC permissions to support Docker
