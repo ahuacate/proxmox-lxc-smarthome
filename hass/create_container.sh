@@ -95,16 +95,24 @@ echo
 # Set the LXC VLAN tag
 read -p "Enter VLAN ID: " -e -i 110 TAG
 info "Container VLAN is $TAG."
+echo
 
 # Set the LXC Gateway IPv4 Address
 read -p "Enter Gateway IPv4 address: " -e -i 192.168.110.5 GW
 info "Container Gateway IPv4 address is $GW."
+echo
 
 # Set the LXC ID
 #CTID=$(pvesh get /cluster/nextid)
 #info "Container ID is $CTID."
 read -p "Enter LXC CTID: " -e -i 131 CTID
 info "Container ID is $CTID."
+echo
+
+# Set the LXC Virtual Disk Size
+read -p "Enter LXC Virtual Disk Size: " -e -i 30G DISK_SIZE
+info "Container Virtual Disk is $DISK_SIZE."
+echo
 
 # Download latest Debian LXC template
 msg "Updating LXC template list..."
@@ -134,7 +142,7 @@ ROOTFS=${STORAGE}:${DISK_REF-}${DISK}
 
 # Create LXC
 msg "Creating LXC container..."
-pvesm alloc $STORAGE $CTID $DISK 30G --swap 256 --format ${DISK_FORMAT:-raw} >/dev/null
+pvesm alloc $STORAGE $CTID $DISK $DISK_SIZE --format ${DISK_FORMAT:-raw} >/dev/null
 if [ "$STORAGE_TYPE" != "zfspool" ]; then
   mke2fs $(pvesm path $ROOTFS) &>/dev/null
 fi
@@ -143,7 +151,7 @@ HOSTNAME=hassio
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -cpulimit 1 -cpuunits 1024 -memory 2048 -features nesting=1 \
   -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
-  -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -storage $STORAGE >/dev/null
+  -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -swap 256 -storage $STORAGE >/dev/null
 
 # Modify LXC permissions to support Docker
 LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
