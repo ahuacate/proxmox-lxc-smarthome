@@ -171,9 +171,34 @@ MOUNT=$(pct mount $CTID | cut -d"'" -f 2)
 ln -fs $(readlink /etc/localtime) ${MOUNT}/etc/localtime
 pct unmount $CTID && unset MOUNT
 
+# Add LXC mount points
+pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
+pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+
+# Unprivileged container mapping for User storm | Group homelab
+echo -e "lxc.idmap: u 0 100000 1606
+lxc.idmap: g 0 100000 100
+lxc.idmap: u 1606 1606 1
+lxc.idmap: g 100 100 1
+lxc.idmap: u 1607 101607 63929
+lxc.idmap: g 101 100101 65435
+# Below are our Synology NAS Group GID's (i.e homelab) in range from 65604 > 65704
+lxc.idmap: u 65604 65604 100
+lxc.idmap: g 65604 65604 100" >> /etc/pve/lxc/${CTID}.conf
+grep -qxF 'root:65604:100' /etc/subuid || echo 'root:65604:100' >> /etc/subuid &&
+grep -qxF 'root:65604:100' /etc/subgid || echo 'root:65604:100' >> /etc/subgid &&
+grep -qxF 'root:100:1' /etc/subgid || echo 'root:100:1' >> /etc/subgid &&
+grep -qxF 'root:1606:1' /etc/subuid || echo 'root:1606:1' >> /etc/subuid
+
 # Setup container for Hass.io
 msg "Starting LXC container..."
 pct start $CTID
+
+# Create new "storm" user
+pct exec $CTID -- bash -c groupadd -g 65606 homelab
+pct exec $CTID -- bash -c useradd -u 1606 -g homelab -m storm
+
+# Setup container for Hass.io
 pct push $CTID setup.sh /setup.sh -perms 755
 pct exec $CTID -- bash -c "/setup.sh"
 
