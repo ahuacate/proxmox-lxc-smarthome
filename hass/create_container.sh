@@ -153,6 +153,10 @@ pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -cpulimit 1 -cpuunits 102
   -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
   -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -swap 256 -storage $STORAGE >/dev/null
 
+# Add LXC mount points
+pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
+pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+
 # Modify LXC permissions to support Docker
 LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
 cat <<EOF >> $LXC_CONFIG
@@ -170,10 +174,6 @@ EOF
 MOUNT=$(pct mount $CTID | cut -d"'" -f 2)
 ln -fs $(readlink /etc/localtime) ${MOUNT}/etc/localtime
 pct unmount $CTID && unset MOUNT
-
-# Add LXC mount points
-#pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
-#pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
 
 # Setup container for Hass.io
 msg "Starting LXC container..."
