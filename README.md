@@ -99,4 +99,4 @@ To create a new Ubuntu 18.04 LXC container on Proxmox and setup Hass.io to run i
 bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/hassio_create_container.sh)"
 ```
 
-During the setup process you will be prompted for inputs to configure your new Hassio LXC.
+During the setup process you will be prompted for inputs to configure your new Hassio LXC (i.e IPv4 address, CTID, gateway, disk size, password).
