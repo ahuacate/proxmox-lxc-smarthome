@@ -87,75 +87,67 @@ fi
 info "Using '$STORAGE' for storage location."
 echo
 
-# Set the LXC IPv4 Address
-read -p "Enter IP address: " -e -i 192.168.110.131/24 IP
+echo -e "In the next step you must enter your desired Proxmox container settings. \nOr simply press 'ENTER' to accept our defaults."
+echo
+
+# Set container IPv4 Address
+read -p "Enter IPv4 address: " -e -i 192.168.110.131/24 IP
 info "Container IPv4 address is $IP."
 echo
 
-# Set the LXC VLAN tag
+# Set container VLAN tag
 read -p "Enter VLAN ID: " -e -i 110 TAG
 info "Container VLAN is $TAG."
 echo
 
-# Set the LXC Gateway IPv4 Address
+# Set container Gateway IPv4 Address
 read -p "Enter Gateway IPv4 address: " -e -i 192.168.110.5 GW
 info "Container Gateway IPv4 address is $GW."
 echo
 
-# Set the LXC ID
-#CTID=$(pvesh get /cluster/nextid)
-#info "Container ID is $CTID."
-read -p "Enter LXC CTID: " -e -i 131 CTID
+# Set container ID
+read -p "Enter container CTID: " -e -i 131 CTID
 info "Container ID is $CTID."
 echo
 
-# Set the LXC Virtual Disk Size
-read -p "Enter LXC Virtual Disk Size: " -e -i 30G DISK_SIZE
+# Set container Virtual Disk Size
+read -p "Enter container Virtual Disk Size (Gb): " -e -i 30 DISK_SIZE
 info "Container Virtual Disk is $DISK_SIZE."
 echo
 
-# Download latest Debian LXC template
+# Set container Memory
+read -p "Enter amount of container Memory (Gb): " -e -i 2048 RAM
+info "Container allocated memory is $RAM."
+echo
+
+# Set container password
+read -p "Enter container root password: " -e -i hassio PWD
+info "Container root password is '$PWD'."
+echo
+
+# Download latest OS LXC template
 msg "Updating LXC template list..."
 pveam update >/dev/null
 msg "Downloading LXC template..."
-OSTYPE=debian
-OSVERSION=${OSTYPE}-10
+OSTYPE=ubuntu
+OSVERSION=${OSTYPE}-18
 mapfile -t TEMPLATES < <(pveam available -section system | sed -n "s/.*\($OSVERSION.*\)/\1/p" | sort -t - -k 2 -V)
 TEMPLATE="${TEMPLATES[-1]}"
 pveam download local $TEMPLATE >/dev/null ||
   die "A problem occured while downloading the LXC template."
-
-# Create variables for container disk
-STORAGE_TYPE=$(pvesm status -storage $STORAGE | awk 'NR>1 {print $2}')
-case $STORAGE_TYPE in
-  dir|nfs)
-    DISK_EXT=".raw"
-    DISK_REF="$CTID/"
-    ;;
-  zfspool)
-    DISK_PREFIX="subvol"
-    DISK_FORMAT="subvol"
-    ;;
-esac
-DISK=${DISK_PREFIX:-vm}-${CTID}-disk-0${DISK_EXT-}
-ROOTFS=${STORAGE}:${DISK_REF-}${DISK}
-
-# Create LXC
-msg "Creating LXC container..."
-pvesm alloc $STORAGE $CTID $DISK $DISK_SIZE --format ${DISK_FORMAT:-raw} >/dev/null
-if [ "$STORAGE_TYPE" != "zfspool" ]; then
-  mke2fs $(pvesm path $ROOTFS) &>/dev/null
-fi
 ARCH=$(dpkg --print-architecture)
 HOSTNAME=hassio
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
-pct create $CTID $TEMPLATE_STRING -arch $ARCH -cores 1 -cpulimit 1 -cpuunits 1024 -memory 2048 -features nesting=1 \
-  -hostname $HOSTNAME -net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth -onboot 1 \
-  -ostype $OSTYPE -password "hassio" -rootfs $ROOTFS -swap 256 -storage $STORAGE >/dev/null
+
+# Create LXC
+msg "Creating LXC container..." 
+pct create $CTID $TEMPLATE_STRING --arch $ARCH --cores 1 --hostname $HOSTNAME --cpulimit 1 --memory $RAM --features nesting=1 \
+  --net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth \
+  --ostype $OSTYPE --rootfs $STORAGE:$DISK_SIZE --swap 256 --unprivileged 0 --onboot 1 --startup order=1 --password $PWD >/dev/null
 
 # Add LXC mount points
-#pct set $CTID -mp0 /mnt/pve/cyclone-01-backup,mp=/mnt/backup
-#pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
+pct set $CTID -mp0 /mnt/pve/cyclone-01-backup/hassio,mp=/mnt/backup
+pct set $CTID -mp1 /mnt/pve/cyclone-01-public,mp=/mnt/public
 
 # Modify LXC permissions to support Docker
 LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
@@ -165,21 +157,61 @@ lxc.cap.drop:
 EOF
 
 # Add access to ttyACM,ttyS,ttyUSB,net/tun devices
+LXC_CONFIG=/etc/pve/lxc/${CTID}.conf
 cat <<'EOF' >> $LXC_CONFIG
 lxc.autodev: 1
 lxc.hook.autodev: bash -c 'for dev in $(ls /dev/tty{ACM,S,USB}* 2>/dev/null) $([ -d "/dev/bus" ] && find /dev/bus -type c) /dev/mem /dev/net/tun; do mkdir -p $(dirname ${LXC_ROOTFS_MOUNT}${dev}); for link in $(udevadm info --query=property $dev | sed -n "s/DEVLINKS=//p"); do mkdir -p ${LXC_ROOTFS_MOUNT}$(dirname $link); cp -dR $link ${LXC_ROOTFS_MOUNT}${link}; done; cp -dR $dev ${LXC_ROOTFS_MOUNT}${dev}; done'
 EOF
 
+# Create a hassio backup folder on NAS
+msg "Creating hassio backup folder on NAS..."
+mkdir -p /mnt/pve/cyclone-01-backup/hassio &&
+chown 1607:65607 /mnt/pve/cyclone-01-backup/hassio
+
+# Start container
+msg "Starting container..."
+pct start $CTID
+
+# Create new container users and groups
+msg "Creating new container users and groups..."
+pct exec $CTID -- groupadd -g 65607 privatelab
+pct exec $CTID -- useradd -u 1607 -g privatelab -m typhoon
+
+# Set Container locale
+msg "Setting container locale..."
+pct exec $CTID -- sed -i "/$LANG/ s/\(^# \)//" /etc/locale.gen
+pct exec $CTID -- locale-gen >/dev/null
+
+# Ubuntu fix to avoid prompt to restart services during "apt apgrade"
+msg "Patching prompt for user inputs during container upgrades..."
+pct exec $CTID -- sudo apt-get -y install debconf-utils >/dev/null
+pct exec $CTID -- sudo debconf-get-selections | grep libssl1.0.0:amd64 >/dev/null
+pct exec $CTID -- bash -c "echo '* libraries/restart-without-asking boolean true' | sudo debconf-set-selections"
+
 # Set container timezone to match host
+msg "Set container time to match host..."
 MOUNT=$(pct mount $CTID | cut -d"'" -f 2)
 ln -fs $(readlink /etc/localtime) ${MOUNT}/etc/localtime
 pct unmount $CTID && unset MOUNT
 
+# Update container OS
+msg "Updating container OS..."
+pct exec $CTID -- apt-get update >/dev/null
+pct exec $CTID -- apt-get -qqy upgrade >/dev/null
+
+# Install prerequisites
+msg "Installing prerequisites..."
+pct exec $CTID -- apt-get install -y software-properties-common >/dev/null
+pct exec $CTID -- apt-get install -y apparmor-utils >/dev/null
+pct exec $CTID -- apt-get install -y apt-transport-https >/dev/null
+pct exec $CTID -- apt-get install -y ca-certificates >/dev/null
+pct exec $CTID -- apt-get install -y socat >/dev/null
+# pct exec $CTID -- apt-get install -y python3-pip >/dev/null
+
 # Setup container for Hass.io
-#msg "Starting LXC container..."
-#pct start $CTID
-#pct push $CTID setup.sh /setup.sh -perms 755
-#pct exec $CTID -- bash -c "/setup.sh"
+msg "Starting whiskerz007 hassio installation script..."
+pct push $CTID setup.sh /setup.sh -perms 755
+pct exec $CTID -- bash -c "/setup.sh"
 
 # Get network details and show completion message
 IP=$(pct exec $CTID ip a s dev eth0 | sed -n '/inet / s/\// /p' | awk '{print $2}')
