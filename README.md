@@ -92,8 +92,8 @@ Here we create a Home Assistant ( also known as Hass.io, HA) which is a home aut
 
 To make life easy we use the proven and dependable [whiskerz007](https://github.com/whiskerz007/proxmox_hassio_lxc) setup scripts to install Hass.io modified to install on Ubuntu 18.04 instead of Debian 10.
 
-### 2.01 Turnkey Hassio Installation - Ubuntu 18.04
-To create a new Ubuntu 18.04 LXC container on Proxmox and setup Hass.io to run inside of it, run the following in a SSH connection or the Proxmox web shell `Proxmox CLI Datacenter` > `typhoon-01` > `>_ Shell` and type the following:
+### 2.01 Rapid Hassio Installation - Ubuntu 18.04
+To create a new Ubuntu 18.04 LXC container on Proxmox and setup Hass.io to run inside of it, run the following in a SSH connection or use the Proxmox WebGUI shell `Proxmox Datacenter` > `typhoon-01` > `>_ Shell` and type the following:
 
 ```
 bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/create_container.sh)"
