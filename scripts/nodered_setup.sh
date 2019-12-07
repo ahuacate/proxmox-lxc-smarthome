@@ -32,10 +32,6 @@ npm install -g --unsafe-perm node-red >/dev/null
 # Create Node-Red Service
 msg "Creating nodered service..."
 cat << EOF > /etc/systemd/system/node-red.service
-# systemd service file to start Node-RED
-# modified version of the pi definition
-# https://raw.githubusercontent.com/node-red/raspbian-deb-package/master/resources/nodered.service
-
 [Unit]
 Description=node-red graphical event wiring tool
 Wants=network.target
