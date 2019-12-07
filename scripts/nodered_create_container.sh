@@ -211,7 +211,7 @@ pct exec $CTID -- apt-get -qqy upgrade >/dev/null
 
 # Setup container for Hass.io
 msg "Starting ahuacate $HOSTNAME installation script..."
-pct push $CTID setup.sh /nodered_setup.sh -perms 755
+pct push $CTID nodered_setup.sh /nodered_setup.sh -perms 755
 pct exec $CTID -- bash -c "/nodered_setup.sh"
 
 # Get network details and show completion message
