@@ -23,7 +23,7 @@ chown 1607:65607 -R /home/typhoon/nodered
 
 # Install prerequisites
 msg "Installing Node-Red prerequisites..."
-apt install -y npm >/dev/null
+apt-get install -y npm >/dev/null
 
 # Install Node-Red
 msg "Installing Node-Red..."
@@ -63,7 +63,7 @@ EOF
 
 # Start Node-Red Service
 msg "Starting Node-Red service..."
-systemctl daemon-reload >/dev/null
-systemctl enable node-red.service >/dev/null
-systemctl start node-red.service >/dev/null
-systemctl status node-red.service >/dev/null
+systemctl daemon-reload
+systemctl enable node-red.service
+systemctl start node-red.service
+systemctl status node-red.service
