@@ -44,7 +44,7 @@ This is achieved in three parts during the course of creating your new media LXC
 ### 1.01 Unprivileged container mapping - privatelab
 To change a container mapping we change the container UID and GID in the file `/etc/pve/lxc/container-id.conf` after you create a new container. Simply use Proxmox CLI `typhoon-01` >  `>_ Shell` and type the following:
 ```
-# User media | Group homelab
+# User media | Group privatelab
 echo -e "lxc.idmap: u 0 100000 1607
 lxc.idmap: g 0 100000 100
 lxc.idmap: u 1607 1607 1
