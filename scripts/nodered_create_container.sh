@@ -209,7 +209,7 @@ pct exec $CTID -- apt-get -qqy upgrade >/dev/null
 # pct exec $CTID -- apt-get install -y <software> >/dev/null
 
 
-# Setup container for Hass.io
+# Setup container for Node-Red
 msg "Starting ahuacate $HOSTNAME installation script..."
 pct push $CTID nodered_setup.sh /nodered_setup.sh -perms 755
 pct exec $CTID -- bash -c "/nodered_setup.sh"
