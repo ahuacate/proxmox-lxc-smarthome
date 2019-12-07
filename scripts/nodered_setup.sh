@@ -63,3 +63,7 @@ systemctl daemon-reload
 systemctl enable node-red.service
 systemctl start node-red.service
 systemctl status node-red.service
+
+# Cleanup container
+msg "Cleanup..."
+rm -rf /nodered_setup.sh /var/{cache,log}/* /var/lib/apt/lists/*
