@@ -36,23 +36,19 @@ cat << EOF > /etc/systemd/system/node-red.service
 Description=node-red graphical event wiring tool
 Wants=network.target
 Documentation=http://nodered.org
-
 [Service]
 Type=simple
 User=typhoon
 Group=privatelab
 WorkingDirectory=/home/typhoon/nodered
-
 Nice=5
 #Environment="NODE_OPTIONS=--max_old_space_size=256"
 # uncomment the next line for a more verbose log output
 #Environment="NODE_RED_OPTIONS=-v"
 ExecStart=/usr/bin/env node-red $NODE_OPTIONS $NODE_RED_OPTIONS
-
 KillSignal=SIGINT
 Restart=on-failure
 SyslogIdentifier=node-red
-
 [Install]
 WantedBy=multi-user.target
 EOF
