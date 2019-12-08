@@ -27,7 +27,7 @@ apt-get install -y npm >/dev/null
 
 # Install Node-Red
 msg "Installing Node-Red..."
-npm install -g --unsafe-perm node-red >/dev/null
+npm install -g --unsafe-perm node-red
 
 # Create Node-Red Service
 msg "Creating nodered service..."
@@ -51,7 +51,7 @@ Restart=on-failure
 SyslogIdentifier=node-red
 
 [Install]
-WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service >/dev/null
+WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service
 
 # Start Node-Red Service
 msg "Starting Node-Red service..."
