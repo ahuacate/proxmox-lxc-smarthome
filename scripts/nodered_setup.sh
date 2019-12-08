@@ -51,7 +51,7 @@ Restart=on-failure
 SyslogIdentifier=node-red
 
 [Install]
-WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service
+WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service >/dev/null
 
 # Start Node-Red Service
 msg "Starting Node-Red service..."
