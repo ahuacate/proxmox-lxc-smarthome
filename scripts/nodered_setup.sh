@@ -31,11 +31,11 @@ npm install -g --unsafe-perm node-red >/dev/null
 
 # Create Node-Red Service
 msg "Creating nodered service..."
-cat << EOF > /etc/systemd/system/node-red.service
-[Unit]
+echo -e "[Unit]
 Description=node-red graphical event wiring tool
 Wants=network.target
 Documentation=http://nodered.org
+
 [Service]
 Type=simple
 User=typhoon
@@ -49,9 +49,9 @@ ExecStart=/usr/bin/env node-red $NODE_OPTIONS $NODE_RED_OPTIONS
 KillSignal=SIGINT
 Restart=on-failure
 SyslogIdentifier=node-red
+
 [Install]
-WantedBy=multi-user.target
-EOF
+WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service
 
 # Start Node-Red Service
 msg "Starting Node-Red service..."
