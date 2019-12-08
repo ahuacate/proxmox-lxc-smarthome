@@ -23,7 +23,7 @@ chown 1607:65607 -R /home/typhoon/nodered
 
 # Install prerequisites
 msg "Installing Node-Red prerequisites..."
-apt-get install -y npm >/dev/null
+apt-get install -y npm
 
 # Install Node-Red
 msg "Installing Node-Red..."
@@ -31,7 +31,8 @@ npm install -g --unsafe-perm node-red
 
 # Create Node-Red Service
 msg "Creating nodered service..."
-echo -e "[Unit]
+cat << EOF > /etc/systemd/system/node-red.service
+[Unit]
 Description=node-red graphical event wiring tool
 Wants=network.target
 Documentation=http://nodered.org
@@ -51,7 +52,8 @@ Restart=on-failure
 SyslogIdentifier=node-red
 
 [Install]
-WantedBy=multi-user.target" >> /etc/systemd/system/node-red.service
+WantedBy=multi-user.target
+EOF
 
 # Start Node-Red Service
 msg "Starting Node-Red service..."
