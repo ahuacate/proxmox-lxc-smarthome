@@ -87,11 +87,14 @@ useradd -u 1607 -g privatelab -m typhoon
 ```
 Note: We do not need to create a new user group because `users` is a default linux group with GID value 100.
 
+
 ## 2.00 ZigBee Gateway
 Coming soon.
 
+
 ## 3.00 Z-Wave Gateway
 Coming soon.
+
 
 ## 4.00 Home Assistant (Hassio) LXC - Ubuntu 18.04
 Here we create a Home Assistant ( also known as Hass.io, HA) which is a home automation that puts local control and privacy first. Read about it [here](https://www.home-assistant.io/).
@@ -108,7 +111,7 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 During the setup process you will be prompted for inputs to configure your new Hassio LXC (i.e IPv4 address, CTID, gateway, disk size, password).
 
 ### 4.02 Default console login credentials
-Your default login password was set during the rapid installation process. If you did'nt change the default password here are your console login details.
+Your default login password was set during the rapid installation process. If you did'nt change the default password here is your console login details.
 
 ```
 Username: root
@@ -116,6 +119,7 @@ Password: ahuacate
 ```
 
 To change your default root password use the CLI command `passwd`.
+
 
 ## 5.00 Node-Red LXC - Ubuntu 18.04
 Node-RED is a programming tool for wiring together hardware devices, APIs and online services in new and interesting ways.
