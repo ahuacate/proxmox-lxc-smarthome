@@ -87,12 +87,18 @@ useradd -u 1607 -g privatelab -m typhoon
 ```
 Note: We do not need to create a new user group because `users` is a default linux group with GID value 100.
 
-## 2.00 Home Assistant (Hassio) LXC - Ubuntu 18.04
+## 2.00 ZigBee Gateway
+Coming soon.
+
+## 3.00 Z-Wave Gateway
+Coming soon.
+
+## 4.00 Home Assistant (Hassio) LXC - Ubuntu 18.04
 Here we create a Home Assistant ( also known as Hass.io, HA) which is a home automation that puts local control and privacy first. Read about it [here](https://www.home-assistant.io/).
 
 To make life easy we use the proven and dependable [whiskerz007](https://github.com/whiskerz007/proxmox_hassio_lxc) setup scripts to install Hass.io modified to install on Ubuntu 18.04 instead of Debian 10.
 
-### 2.01 Rapid Hassio Installation - Ubuntu 18.04
+### 4.01 Rapid Hassio Installation - Ubuntu 18.04
 To create a new Ubuntu 18.04 LXC container on Proxmox and setup Hass.io to run inside of it, run the following in a SSH connection or use the Proxmox WebGUI shell `Proxmox Datacenter` > `typhoon-01` > `>_ Shell` and type the following:
 
 ```
@@ -100,3 +106,39 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 ```
 
 During the setup process you will be prompted for inputs to configure your new Hassio LXC (i.e IPv4 address, CTID, gateway, disk size, password).
+
+### 4.02 Default console login credentials
+Your default login password was set during the rapid installation process. If you did'nt change the default password here are your console login details.
+
+```
+Username: root
+Password: ahuacate
+```
+
+To change your default root password use the CLI command `passwd`.
+
+## 5.00 Node-Red LXC - Ubuntu 18.04
+Node-RED is a programming tool for wiring together hardware devices, APIs and online services in new and interesting ways.
+
+It provides a browser-based editor that makes it easy to wire together flows using the wide range of nodes in the palette that can be deployed to its runtime in a single-click.
+
+To make life easy we use Node-Red authors installation script for Pi hardware. This script will work on any Debian-based operating system, including Ubuntu and fixes any dependency issues.
+
+### 5.01 Rapid Node-Red Installation - Ubuntu 18.04
+To create a new Ubuntu 18.04 LXC container on Proxmox and setup Node-Red to run inside of it, run the following in a SSH connection or use the Proxmox WebGUI shell `Proxmox Datacenter` > `typhoon-01` > `>_ Shell` and type the following:
+
+```
+bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/nodered_create_container.sh)"
+```
+
+During the setup process you will be prompted for inputs to configure your new Node-Red LXC (i.e IPv4 address, CTID, gateway, disk size, password).
+
+### 5.02 Default console login credentials
+Your default login password was set during the rapid installation process. If you did'nt change the default password here is your console login details.
+
+```
+Username: root
+Password: ahuacate
+```
+
+To change your default root password use the CLI command `passwd`.
