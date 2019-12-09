@@ -204,11 +204,6 @@ msg "Updating container OS..."
 pct exec $CTID -- apt-get update >/dev/null
 pct exec $CTID -- apt-get -qqy upgrade >/dev/null
 
-# Install prerequisites
-# msg "Installing prerequisites..."
-# pct exec $CTID -- apt-get install -y <software> >/dev/null
-
-
 # Setup container for Node-Red
 msg "Starting ahuacate $HOSTNAME installation script..."
 pct push $CTID nodered_setup.sh /nodered_setup.sh -perms 755
