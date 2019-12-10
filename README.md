@@ -110,7 +110,7 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 
 During the setup process you will be prompted for inputs to configure your new Hassio LXC (i.e IPv4 address, CTID, gateway, disk size, password).
 
-### 4.02 Default console login credentials
+### 4.02 Hassio default console login credentials - Ubuntu 18.04
 Your default login password was set during the rapid installation process. If you did'nt change the default password here is your console login details.
 
 ```
@@ -119,6 +119,9 @@ Password: ahuacate
 ```
 
 To change your default root password use the CLI command `passwd`.
+
+### 4.03 Hassio WebGUI HTTP Access - Ubuntu 18.04
+Home Assistant will be available at http://192.168.110.131:8123
 
 
 ## 5.00 Node-Red LXC - Ubuntu 18.04
@@ -137,7 +140,7 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 
 During the setup process you will be prompted for inputs to configure your new Node-Red LXC (i.e IPv4 address, CTID, gateway, disk size, password).
 
-### 5.02 Default console login credentials
+### 5.02 Node-Red default console login credentials - Ubuntu 18.04
 Your default login password was set during the rapid installation process. If you did'nt change the default password here is your console login details.
 
 ```
@@ -146,3 +149,6 @@ Password: ahuacate
 ```
 
 To change your default root password use the CLI command `passwd`.
+
+### 5.03 Node-Red WebGUI HTTP Access - Ubuntu 18.04
+Home Assistant will be available at http://192.168.110.132:1880
