@@ -35,12 +35,12 @@ echo
 
 # Set Gateway IPv4 Address
 read -p "Enter your network Gateway IPv4 address: " -e -i 192.168.120.5 GW
-info "Phoscon Gateway IPv4 address is $GW."
+echo "Phoscon Gateway IPv4 address is $GW."
 echo
 
 # Set DNS
 read -p "Enter your network DNS server address: " -e -i 192.168.120.5 DNSIP
-info "Phoscon DNS server address is $DNSIP."
+echo "Phoscon DNS server address is $DNSIP."
 echo
 
 # Edit the DHCP conf file
@@ -52,11 +52,11 @@ static domain_name_servers=$DNSIP
 EOF
 
 # Get network details and show completion message
-info "You have successfully changed your Phoscon network settings."
+echo "You have successfully changed your Phoscon network settings."
 msg "
 Phoscon is reachable by going to the following URLs.
       http://${STATICIP}
-      http://${HOSTNAME}.local
+      http://${HOSTNAME}.local"
 echo
 
 # Reboot 
