@@ -30,7 +30,7 @@ fi
 
 # Set container IPv4 Address
 read -p "Enter a Static IPv4 address: " -e -i 192.168.120.133 STATICIP
-info "Phoscon IPv4 address is $STATICIP."
+echo "Phoscon IPv4 address is $STATICIP."
 echo
 
 # Set Gateway IPv4 Address
