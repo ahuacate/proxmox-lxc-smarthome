@@ -60,6 +60,6 @@ Phoscon is reachable by going to the following URLs.
 echo
 
 # Reboot 
-info "Your Phoscon device is rebooting in 5 seconds"
+echo "Your Phoscon device is rebooting in 5 seconds"
 countdown 5
 reboot
