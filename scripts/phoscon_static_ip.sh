@@ -41,3 +41,16 @@ static ip_address=$STATICIP/24
 static routers=$GW
 static domain_name_servers=$DNSIP
 EOF
+
+# Get network details and show completion message
+info "You have successfully changed your Phoscon network settings."
+msg "
+Phoscon is reachable by going to the following URLs.
+      http://${STATICIP}
+      http://${HOSTNAME}.local
+echo
+
+# Reboot 
+info "Your Phoscon device is rebooting in 5 seconds"
+countdown 5
+reboot
