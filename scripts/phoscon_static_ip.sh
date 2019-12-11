@@ -20,17 +20,21 @@ case $input in
 esac
 
 # Set container IPv4 Address
-read -p "Enter a IPv4 address: " -e -i 192.168.110.132/24 STATICIP
-info "Container IPv4 address is $STATICIP."
+read -p "Enter a Static IPv4 address: " -e -i 192.168.120.133 STATICIP
+info "Phoscon IPv4 address is $STATICIP."
 echo
 
-# Set container IPv4 Address
-read -p "Enter a IPv4 address: " -e -i 192.168.110.132/24 STATICIP
-info "Container IPv4 address is $STATICIP."
+# Set Gateway IPv4 Address
+read -p "Enter your network Gateway IPv4 address: " -e -i 192.168.120.5 GW
+info "Phoscon Gateway IPv4 address is $GW."
 echo
 
+# Set DNS
+read -p "Enter your network DNS server address: " -e -i 192.168.120.5 DNSIP
+info "Phoscon DNS server address is $DNSIP."
+echo
 
 interface eth0
-static ip_address=<STATICIP>/24
-static routers=<ROUTERIP>
-static domain_name_servers=<DNSIP>
+static ip_address=$STATICIP/24
+static routers=$GW
+static domain_name_servers=$DNSIP
