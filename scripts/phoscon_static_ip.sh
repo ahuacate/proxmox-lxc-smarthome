@@ -1,23 +1,32 @@
 #!/usr/bin/env bash
 
+set -Eeuo pipefail
+shopt -s expand_aliases
+alias die='EXIT=$? LINE=$LINENO error_exit'
+trap die ERR
+function error_exit() {
+  trap - ERR
+  local DEFAULT='Unknown failure occured.'
+  local REASON="\e[97m${1:-$DEFAULT}\e[39m"
+  local FLAG="\e[91m[ERROR:LXC] \e[93m$EXIT@$LINE"
+  msg "$FLAG $REASON"
+  exit $EXIT
+}
+function msg() {
+  local TEXT="$1"
+  echo -e "$TEXT"
+}
+
 echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nIn the next step you will set your device to use a static IPv4 address. \nYou must enter your desired Phoscon Conbee network address settings. \nOr simply press 'ENTER' to accept our defaults."
 echo
 
 # Query user to proceed [Y/n]
-read -r -p "Are You Sure? [Y/n] " input
- 
-case $input in
-    [yY][eE][sS]|[yY])
- echo "Yes"
- ;;
-    [nN][oO]|[nN])
- echo "No"
-       ;;
-    *)
- echo "Invalid input..."
- exit 1
- ;;
-esac
+read -p "Do you want to proceed? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+fi
 
 # Set container IPv4 Address
 read -p "Enter a Static IPv4 address: " -e -i 192.168.120.133 STATICIP
