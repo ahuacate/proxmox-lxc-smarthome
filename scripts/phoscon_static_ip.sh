@@ -34,7 +34,10 @@ read -p "Enter your network DNS server address: " -e -i 192.168.120.5 DNSIP
 info "Phoscon DNS server address is $DNSIP."
 echo
 
+# Edit the DHCP conf file
+cat << EOF > /etc/dhcpcd.conf
 interface eth0
 static ip_address=$STATICIP/24
 static routers=$GW
 static domain_name_servers=$DNSIP
+EOF
