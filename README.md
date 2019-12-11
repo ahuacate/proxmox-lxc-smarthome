@@ -88,8 +88,17 @@ useradd -u 1607 -g privatelab -m typhoon
 Note: We do not need to create a new user group because `users` is a default linux group with GID value 100.
 
 
-## 2.00 ZigBee Gateway
-Coming soon.
+## 2.00 ZigBee Gateway - Phoscon
+I use a USB Zigbee device called a [Conbee2](https://phoscon.de/en/conbee2/) by [phoscon.de](https://phoscon.de). Its a universal Zigbee USB gateway device which most importantly is a cloud free solution. It works with most opular zigbee automation Systems.
+
+You will need a Raspberry Pi to host your Conbee Zigbee device.
+
+### 2.01 Setup Pi Host - Phoscon
+Use a prebuilt SDCard image from the phoscon website. The image contains the pre-installed deCONZ software as well as the Phoscon App. Follow the instructions [HERE](https://phoscon.de/en/conbee2/sdcard) using the Raspbian Buster Headless image file.
+
+Connect your Pi Host to your LAN network and power-on.
+
+### 2.02 
 
 
 ## 3.00 Z-Wave Gateway
