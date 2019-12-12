@@ -29,22 +29,23 @@ then
 fi
 
 # Set container IPv4 Address
-read -p "Enter a Static IPv4 address: " -e -i 192.168.120.133 STATICIP
+read -p "Enter a Static IPv4 address: " -e -i 192.168.110.139 STATICIP
 echo "Phoscon IPv4 address is $STATICIP."
 echo
 
 # Set Gateway IPv4 Address
-read -p "Enter your network Gateway IPv4 address: " -e -i 192.168.120.5 GW
+read -p "Enter your network Gateway IPv4 address: " -e -i 192.168.110.5 GW
 echo "Phoscon Gateway IPv4 address is $GW."
 echo
 
 # Set DNS
-read -p "Enter your network DNS server address: " -e -i 192.168.120.5 DNSIP
+read -p "Enter your network DNS server address: " -e -i 192.168.110.5 DNSIP
 echo "Phoscon DNS server address is $DNSIP."
 echo
 
 # Edit the DHCP conf file
-cat << EOF > /etc/dhcpcd.conf
+cat << EOF >> /etc/dhcpcd.conf
+
 interface eth0
 static ip_address=$STATICIP/24
 static routers=$GW
