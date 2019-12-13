@@ -51,13 +51,13 @@ echo
 
 # Edit the DHCP conf file
 if ! grep -q "static ip_address=" /etc/dhcpcd.conf ; then
-     cat << EOF >> /etc/dhcpcd.conf
+cat << EOF >> /etc/dhcpcd.conf
      
-     interface eth0
-     static ip_address=$STATICIP/24
-     static routers=$GW
-     static domain_name_servers=$DNSIP
-     EOF
+interface eth0
+static ip_address=$STATICIP/24
+static routers=$GW
+static domain_name_servers=$DNSIP
+EOF
 
 # Get network details and show completion message
 echo "You have successfully changed your Phoscon device network settings."
