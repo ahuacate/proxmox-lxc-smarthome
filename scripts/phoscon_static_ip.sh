@@ -25,7 +25,8 @@ read -n 1 -p "Do you want to continue(Y/N): " choice
 case $choice in
 Y | y) 
       echo
-      echo "Go on";;
+      echo "Okay. Lets continue...";;
+      echo
 N | n)
       echo
       echo "Goodbye"
