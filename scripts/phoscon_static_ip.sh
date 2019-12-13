@@ -20,13 +20,17 @@ function msg() {
 echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nIn the next step you will set your device to use a static IPv4 address. \nYou must enter your desired Phoscon Conbee network address settings. \nOr simply press 'ENTER' to accept our defaults."
 echo
 
-# Query user to proceed [Y/n]
-read -p "Do you want to proceed? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-fi
+#Bash Shell script to check the usage of -n option
+read -n 1 -p "Do you want to continue(Y/N): " choice
+case $choice in
+Y | y) 
+      echo
+      echo "Go on";;
+N | n)
+      echo
+      echo "Goodbye"
+      exit;;
+esac
 
 # Set container IPv4 Address
 read -p "Enter a Static IPv4 address: " -e -i 192.168.110.139 STATICIP
