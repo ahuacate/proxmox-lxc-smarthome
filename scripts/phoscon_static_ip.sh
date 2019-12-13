@@ -50,7 +50,7 @@ echo "Phoscon DNS server address is $DNSIP."
 echo
 
 # Edit the DHCP conf file
-if ! grep -q "static ip_address=$STATICIP/24" /etc/dhcpcd.conf ; then
+if ! grep -q "static ip_address=" /etc/dhcpcd.conf ; then
      cat << EOF >> /etc/dhcpcd.conf
      
      interface eth0
@@ -58,7 +58,6 @@ if ! grep -q "static ip_address=$STATICIP/24" /etc/dhcpcd.conf ; then
      static routers=$GW
      static domain_name_servers=$DNSIP
      EOF
-fi
 
 # Get network details and show completion message
 echo "You have successfully changed your Phoscon device network settings."
