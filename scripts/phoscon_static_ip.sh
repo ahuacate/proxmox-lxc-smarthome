@@ -19,7 +19,7 @@ function msg() {
 
 echo
 echo
-echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nIn the next steps you will be asked to enter your new static IPv4 address settings. \nOr simply press 'ENTER' to accept our default IP values."
+echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nThis script will change your network settings to a static IPv4 address."
 echo
 
 # Bash Shell script to ask whether user wants to continue
@@ -30,6 +30,9 @@ then
     exit 1
 fi
 echo
+echo -e "In the next steps you will be asked to enter a static IPv4 address settings. \nOr simply press 'ENTER' to accept our default IP values."
+echo
+sleep 1
 
 # Set container IPv4 Address
 read -p "Enter a Static IPv4 address: " -e -i 192.168.110.139 STATICIP
