@@ -23,17 +23,12 @@ echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresse
 echo
 
 # Bash Shell script to ask whether user wants to continue
-read -n 1 -p "Do you want to continue(Y/N): " choice
-case $choice in
-Y | y) 
-      echo
-      echo "Okay. Lets continue...";;
-      echo
-N | n)
-      echo
-      echo "Goodbye"
-      exit;;
-esac
+read -p "Are you sure? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi
 
 # Set container IPv4 Address
 read -p "Enter a Static IPv4 address: " -e -i 192.168.110.139 STATICIP
