@@ -17,10 +17,12 @@ function msg() {
   echo -e "$TEXT"
 }
 
-echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nIn the next step you will set your device to use a static IPv4 address. \nYou must enter your desired Phoscon Conbee network address settings. \nOr simply press 'ENTER' to accept our defaults."
+echo
+echo
+echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nIn the next steps you will be asked to enter your new static IPv4 address settings. \nOr simply press 'ENTER' to accept our default IP values."
 echo
 
-#Bash Shell script to check the usage of -n option
+# Bash Shell script to ask whether user wants to continue
 read -n 1 -p "Do you want to continue(Y/N): " choice
 case $choice in
 Y | y) 
@@ -58,14 +60,15 @@ static domain_name_servers=$DNSIP
 EOF
 
 # Get network details and show completion message
-echo "You have successfully changed your Phoscon network settings."
+echo "You have successfully changed your Phoscon device network settings."
 msg "
-Phoscon is reachable by going to the following URLs.
+Phoscon is reachable by going to the following URLs after your device reboots.
       http://${STATICIP}
       http://${HOSTNAME}.local"
+sleep 2
 echo
 
 # Reboot 
 echo "Your Phoscon device is rebooting in 5 seconds...."
 countdown 5
-reboot
+sudo reboot
