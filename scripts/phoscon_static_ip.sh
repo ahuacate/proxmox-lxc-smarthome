@@ -50,7 +50,10 @@ echo "Phoscon DNS server address is $DNSIP."
 echo
 
 # Edit the DHCP conf file
-if ! grep -q "static ip_address=" /etc/dhcpcd.conf ; then
+grep static ip_address=$STATICIP/24 /etc/dhcpcd.conf || {
+    echo "ERROR - A static IP already exists...."
+    exit 2
+}
 cat << EOF >> /etc/dhcpcd.conf
      
 interface eth0
