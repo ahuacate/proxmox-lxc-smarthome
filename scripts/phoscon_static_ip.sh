@@ -69,5 +69,11 @@ echo
 
 # Reboot 
 echo "Your Phoscon device is rebooting in 5 seconds...."
-countdown 5
+secs=$((5 * 1))
+while [ $secs -gt 0 ]; do
+   echo -ne "$secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done
+echo
 sudo reboot
