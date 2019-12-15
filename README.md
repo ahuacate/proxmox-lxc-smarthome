@@ -98,7 +98,33 @@ Use a prebuilt SDCard image from the phoscon website. The image contains the pre
 
 Connect your Pi Host to your LAN network and power-on.
 
-### 2.02 
+### 2.02 Set Static IP - Phoscon
+By default your Phoscon device uses DHCP to obtain a IPv4 address. We need a static IPv4 address.
+
+You have two choices:
+*  Edit the hosts network configuration file to set a Static IPv4 address; or,
+*  Use UniFi to assign a LAN port to VLAN LAN-IoT (VLAN110) and reserve a static IPv4 of 192.168.110.139
+
+The second method maybe the easiest. Simply run our script to automatically edit your Phoscon host IPv4 address. Steps to follow are:
+
+A)  SSH Log into your Phoscon device
+Use SSh and log into your Phoscon device. The default credentials are:
+
+```
+Username: pi
+Password: raspbeegw
+```
+
+In the SSH shell type and execute the following to set a static IPv4 address. The script will prompt for user inputs:
+
+```
+bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/phoscon_static_ip.sh)"
+```
+
+B) Assign your witch LAN port to VLAN LAN-IoT (VLAN110)
+Go to your UniFi controller `devices` > `choose switch (i.e UniFi Switch 24/48)` > `Edit LAN port your Phoscon device is connected to` > `Switch Port Profile` > `LAN-IoT(110)` and click `Apply`
+
+
 
 
 ## 3.00 Z-Wave Gateway
