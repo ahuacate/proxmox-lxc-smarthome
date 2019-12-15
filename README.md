@@ -108,7 +108,7 @@ You have two choices:
 The second method maybe the easiest. Simply run our script to automatically edit your Phoscon host IPv4 address. Steps to follow are:
 
 A)  SSH Log into your Phoscon device
-Use SSh and log into your Phoscon device. The default credentials are:
+Use SSH and log into your Phoscon device. The default credentials are:
 
 ```
 Username: pi
@@ -126,6 +126,18 @@ Go to your UniFi controller `devices` > `choose switch (i.e UniFi Switch 24/48)`
 
 ![alt text](https://raw.githubusercontent.com/ahuacate/proxmox-lxc-smarthome/master/images/vlan110_mod.png)
 
+### 2.03 Upgrade deConz - Phoscon
+SSH Log into your Phoscon device (ssh pi@192.168.110.139). The default credentials are:
+
+```
+Username: pi
+Password: raspbeegw
+```
+and type the following:
+
+```
+sudo apt upgrade -y deconz
+```
 
 ## 3.00 Z-Wave Gateway
 Coming soon.
