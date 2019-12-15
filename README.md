@@ -124,8 +124,7 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 B) Assign your witch LAN port to VLAN LAN-IoT (VLAN110)
 Go to your UniFi controller `devices` > `choose switch (i.e UniFi Switch 24/48)` > `Edit LAN port your Phoscon device is connected to` > `Switch Port Profile` > `LAN-IoT(110)` and click `Apply`
 
-![alt text](https://raw.githubusercontent.com/ahuacate/proxmox-lxc-smarthome
-/master/images/vlan110_mod.png)
+![alt text](https://raw.githubusercontent.com/ahuacate/proxmox-lxc-smarthome/master/images/vlan110_mod.png)
 
 
 ## 3.00 Z-Wave Gateway
