@@ -19,7 +19,7 @@ function msg() {
 
 echo
 echo
-echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nThis script will change your network settings to a static IPv4 address."
+echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nThis script will change your network settings to a static IPv4 address. \nThe script will also upgrade your deConz software."
 echo
 
 # Bash Shell script to ask whether user wants to continue
@@ -48,6 +48,10 @@ echo
 read -p "Enter your network DNS server address: " -e -i 192.168.110.5 DNSIP
 echo "Phoscon DNS server address is $DNSIP."
 echo
+
+# Upgrade deconz
+echo "Updating deconz software...."
+sudo apt-get upgrade -y deconz >/dev/null
 
 # Edit the DHCP conf file
 cat << EOF >> /etc/dhcpcd.conf
