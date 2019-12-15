@@ -19,7 +19,7 @@ function msg() {
 
 echo
 echo
-echo -e "By default your Phoscon Raspian device uses DHCP IPv4 assigned addresses. \nThis script will change your network settings to a static IPv4 address. \nThe script will also upgrade your deConz software."
+echo -e "By default your Phoscon Raspian device uses a DHCP IPv4 assigned address. \nThis script edit your network settings to a static IPv4 address. \nThe script will also upgrade your deConz software to the latest version."
 echo
 
 # Bash Shell script to ask whether user wants to continue
