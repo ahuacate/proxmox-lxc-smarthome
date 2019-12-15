@@ -140,7 +140,7 @@ sudo apt upgrade -y deconz
 ```
 
 ### 2.04 Patches and fixes - Phoscon
-If you have issues with your SDCard maybe a quick fix is to fully wipe/erase the SDCard.
+If you have issues with your SDCard maybe a quick fix is to fully wipe/erase the SDCard before Step 2.01.
 
 **Method A - Diskpart (Windows)**
 Start a command prompt, and start the DISKPART console. List all of your disks by typing LIST DISK, then select the proper disk with SELECT DISK # (where # is the SD card). You can then type CLEAN to clear the partition table on the card, effectively blanking it. MAKE SURE YOU SELECTED THE PROPER DISK BEFORE RUNNING THE CLEAN COMMAND!
