@@ -115,7 +115,7 @@ Username: pi
 Password: raspbeegw
 ```
 
-In the SSH shell type and execute the following to set a static IPv4 address. The script will prompt for user inputs:
+In the SSH shell type and execute the following to set a static IPv4 address. The script will prompt for user input:
 
 ```
 bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/phoscon_static_ip.sh)"
@@ -124,7 +124,8 @@ bash -c "$(wget -qLO - https://github.com/ahuacate/proxmox-lxc-smarthome/raw/mas
 B) Assign your witch LAN port to VLAN LAN-IoT (VLAN110)
 Go to your UniFi controller `devices` > `choose switch (i.e UniFi Switch 24/48)` > `Edit LAN port your Phoscon device is connected to` > `Switch Port Profile` > `LAN-IoT(110)` and click `Apply`
 
-
+![alt text](https://raw.githubusercontent.com/ahuacate/proxmox-lxc-smarthome
+/master/images/vlan110_mod.png)
 
 
 ## 3.00 Z-Wave Gateway
