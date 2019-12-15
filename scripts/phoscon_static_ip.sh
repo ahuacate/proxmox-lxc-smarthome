@@ -50,10 +50,6 @@ echo "Phoscon DNS server address is $DNSIP."
 echo
 
 # Edit the DHCP conf file
-grep static ip_address=$STATICIP/24 /etc/dhcpcd.conf || {
-    echo "ERROR - A static IP already exists...."
-    exit 2
-}
 cat << EOF >> /etc/dhcpcd.conf
      
 interface eth0
@@ -71,7 +67,7 @@ Phoscon is reachable by going to the following URLs after your device reboots.
 sleep 2
 echo
 
-# Reboot 
+# Reboot with countdown
 echo "Your Phoscon device is rebooting in 5 seconds...."
 secs=$((5 * 1))
 while [ $secs -gt 0 ]; do
