@@ -63,7 +63,7 @@ static domain_name_servers=$DNSIP
 EOF
 
 # Release DHCP Address
-sudo dhclient -v -r
+sudo dhclient -v -r >/dev/null
 
 # Get network details and show completion message
 echo "You have successfully changed your Phoscon device network settings."
