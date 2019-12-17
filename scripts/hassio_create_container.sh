@@ -143,7 +143,7 @@ TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 msg "Creating LXC container..." 
 pct create $CTID $TEMPLATE_STRING --arch $ARCH --cores 1 --hostname $HOSTNAME --cpulimit 1 --memory $RAM --features nesting=1 \
   --net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth \
-  --ostype $OSTYPE --rootfs $STORAGE:$DISK_SIZE --swap 256 --unprivileged 0 --onboot 1 --startup order=1 --password $PWD >/dev/null
+  --ostype $OSTYPE --rootfs $STORAGE:$DISK_SIZE --swap 256 --unprivileged 0 --onboot 1 --startup order=2 --password $PWD >/dev/null
 
 # Add LXC mount points
 pct set $CTID -mp0 /mnt/pve/cyclone-01-backup/hassio,mp=/mnt/backup
