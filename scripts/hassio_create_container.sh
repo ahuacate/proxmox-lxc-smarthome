@@ -121,7 +121,7 @@ info "Container allocated memory is $RAM."
 echo
 
 # Set container password
-read -p "Enter container root password: " -e -i hassio PWD
+read -p "Enter container root password: " -e -i ahuacate PWD
 info "Container root password is '$PWD'."
 echo
 
