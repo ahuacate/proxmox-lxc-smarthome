@@ -59,8 +59,12 @@ function load_module() {
 TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR >/dev/null
 
+# Download Proxmox Template
+wget https://sourceforge.net/projects/openmediavault/files/latest/download -P /mnt/pve/cyclone-01-public
+
+/var/lib/vz/template/iso && gzip -d /var/lib/vz/template/iso/pfSense-CE-2.4.4-RELEASE-p3-amd64.iso.gz
 # Download setup script
-wget -qL https://github.com/ahuacate/proxmox-node/raw/master/scripts/omv_setup.sh
+wget -qL https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/omv_setup.sh
 
 
 # Detect modules and automatically load at boot
@@ -88,32 +92,32 @@ fi
 info "Using '$STORAGE' for storage location."
 echo
 
-echo -e "In the next step you must enter your desired Proxmox container settings. \nOr simply press 'ENTER' to accept our defaults."
+echo -e "In the next step you must enter your desired Proxmox OpenMediaVault (OMV) container settings. \nOr simply press 'ENTER' to accept our defaults."
 echo
 
 # Set container IPv4 Address
-read -p "Enter IPv4 address: " -e -i 192.168.110.131/24 IP
-info "Container IPv4 address is $IP."
+read -p "Enter your OMV IPv4 address or press ENTER to accept default:  " -e -i 192.168.1.12/24 OMV_IP
+info "Container IPv4 address is $OMV_IP."
 echo
 
 # Set container VLAN tag
-read -p "Enter VLAN ID: " -e -i 110 TAG
-info "Container VLAN is $TAG."
+read -p "Enter VLAN ID: " -e -i 1 OMV_TAG
+info "Container VLAN is $OMV_TAG."
 echo
 
 # Set container Gateway IPv4 Address
-read -p "Enter Gateway IPv4 address: " -e -i 192.168.110.5 GW
-info "Container Gateway IPv4 address is $GW."
+read -p "Enter Gateway IPv4 address: " -e -i 192.168.1.5 OMV_GW
+info "Container Gateway IPv4 address is $OMV_GW."
 echo
 
 # Set container ID
-read -p "Enter container CTID: " -e -i 131 CTID
-info "Container ID is $CTID."
+read -p "Enter container CTID: " -e -i 131 OMV_CTID
+info "Container ID is $OMV_CTID."
 echo
 
 # Set container Virtual Disk Size
-read -p "Enter container Virtual Disk Size (Gb): " -e -i 30 DISK_SIZE
-info "Container Virtual Disk is $DISK_SIZE."
+read -p "Enter container Virtual Disk Size (Gb): " -e -i 10 OMV_DISK_SIZE
+info "Container Virtual Disk is $OMV_DISK_SIZE."
 echo
 
 # Set container Memory
