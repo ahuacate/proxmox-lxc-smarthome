@@ -60,9 +60,7 @@ TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR >/dev/null
 
 # Download Proxmox Template
-wget https://sourceforge.net/projects/openmediavault/files/latest/download -P /mnt/pve/cyclone-01-public
-
-/var/lib/vz/template/iso && gzip -d /var/lib/vz/template/iso/pfSense-CE-2.4.4-RELEASE-p3-amd64.iso.gz
+wget https://jaist.dl.sourceforge.net/project/openmediavault/4.1.22/openmediavault_4.1.22-amd64.iso -P /var/lib/vz/template/iso
 # Download setup script
 wget -qL https://github.com/ahuacate/proxmox-lxc-smarthome/raw/master/scripts/omv_setup.sh
 
@@ -121,8 +119,8 @@ info "Container Virtual Disk is $OMV_DISK_SIZE."
 echo
 
 # Set container Memory
-read -p "Enter amount of container Memory (Gb): " -e -i 2048 RAM
-info "Container allocated memory is $RAM."
+read -p "Enter amount of container Memory (Gb): " -e -i 2048 OMV_RAM
+info "Container allocated memory is $OMV_RAM."
 echo
 
 # Set container password
@@ -141,12 +139,12 @@ TEMPLATE="${TEMPLATES[-1]}"
 pveam download local $TEMPLATE >/dev/null ||
   die "A problem occured while downloading the LXC template."
 ARCH=$(dpkg --print-architecture)
-HOSTNAME=hassio
+HOSTNAME=omv
 TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 
 # Create LXC
 msg "Creating LXC container..." 
-pct create $CTID $TEMPLATE_STRING --arch $ARCH --cores 1 --hostname $HOSTNAME --cpulimit 1 --memory $RAM --features nesting=1 \
+pct create $CTID $TEMPLATE_STRING --arch $ARCH --cores 2 --hostname $HOSTNAME --cpulimit 1 --memory $RAM --features nesting=1 \
   --net0 name=eth0,bridge=vmbr0,tag=$TAG,firewall=1,gw=$GW,ip=$IP,type=veth \
   --ostype $OSTYPE --rootfs $STORAGE:$DISK_SIZE --swap 256 --unprivileged 0 --onboot 1 --startup order=2 --password $PWD >/dev/null
 
